@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94D9D20116B8E36E00CB6E14 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D9D20016B8E36E00CB6E14 /* Card.m */; };
+		94D9D20416B8E39C00CB6E14 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D9D20316B8E39C00CB6E14 /* Deck.m */; };
+		94D9D20816B8E3DD00CB6E14 /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D9D20716B8E3DD00CB6E14 /* PlayingCard.m */; };
 		94EC08DE16B8D0EE00AC2F84 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94EC08DD16B8D0EE00AC2F84 /* UIKit.framework */; };
 		94EC08E016B8D0EE00AC2F84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94EC08DF16B8D0EE00AC2F84 /* Foundation.framework */; };
 		94EC08E216B8D0EE00AC2F84 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94EC08E116B8D0EE00AC2F84 /* CoreGraphics.framework */; };
@@ -21,6 +24,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		94D9D1FF16B8E36E00CB6E14 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Model/Card.h; sourceTree = "<group>"; };
+		94D9D20016B8E36E00CB6E14 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Model/Card.m; sourceTree = "<group>"; };
+		94D9D20216B8E39C00CB6E14 /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Deck.h; path = Model/Deck.h; sourceTree = "<group>"; };
+		94D9D20316B8E39C00CB6E14 /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Deck.m; path = Model/Deck.m; sourceTree = "<group>"; };
+		94D9D20616B8E3DD00CB6E14 /* PlayingCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayingCard.h; path = Model/PlayingCard.h; sourceTree = "<group>"; };
+		94D9D20716B8E3DD00CB6E14 /* PlayingCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCard.m; path = Model/PlayingCard.m; sourceTree = "<group>"; };
 		94EC08D916B8D0EE00AC2F84 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94EC08DD16B8D0EE00AC2F84 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		94EC08DF16B8D0EE00AC2F84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -53,6 +62,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		94D9D20516B8E3A300CB6E14 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				94D9D1FF16B8E36E00CB6E14 /* Card.h */,
+				94D9D20016B8E36E00CB6E14 /* Card.m */,
+				94D9D20216B8E39C00CB6E14 /* Deck.h */,
+				94D9D20316B8E39C00CB6E14 /* Deck.m */,
+				94D9D20616B8E3DD00CB6E14 /* PlayingCard.h */,
+				94D9D20716B8E3DD00CB6E14 /* PlayingCard.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		94EC08CE16B8D0EE00AC2F84 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +105,7 @@
 		94EC08E316B8D0EE00AC2F84 /* Matchismo */ = {
 			isa = PBXGroup;
 			children = (
+				94D9D20516B8E3A300CB6E14 /* Model */,
 				94EC08F516B8D0EE00AC2F84 /* MainStoryboard.storyboard */,
 				94EC08F816B8D0EE00AC2F84 /* CardGameViewController.h */,
 				94EC08F916B8D0EE00AC2F84 /* CardGameViewController.m */,
@@ -177,6 +200,9 @@
 				94EC08EA16B8D0EE00AC2F84 /* main.m in Sources */,
 				94EC08EE16B8D0EE00AC2F84 /* CardGameAppDelegate.m in Sources */,
 				94EC08FA16B8D0EE00AC2F84 /* CardGameViewController.m in Sources */,
+				94D9D20116B8E36E00CB6E14 /* Card.m in Sources */,
+				94D9D20416B8E39C00CB6E14 /* Deck.m in Sources */,
+				94D9D20816B8E3DD00CB6E14 /* PlayingCard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +319,7 @@
 				94EC08FF16B8D0EE00AC2F84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
