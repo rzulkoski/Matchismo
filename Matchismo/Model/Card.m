@@ -14,6 +14,11 @@
 
 @implementation Card
 
+- (NSString *)description
+{
+    return self.contents;
+}
+
 - (int)match:(NSArray *)otherCards
 {
     int score = 0;
