@@ -17,9 +17,15 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastFlipLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeControl;
 @end
 
 @implementation CardGameViewController
+
+- (void)viewDidLoad {
+    CGRect frame = self.matchModeControl.frame;
+    [self.matchModeControl setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 24.0)];
+}
 
 - (CardMatchingGame *)game
 {
