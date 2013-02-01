@@ -41,6 +41,11 @@
     [self updateUI];
 }
 
+- (IBAction)newMatchModeSelected {
+    [self dealNewGame];
+}
+
+
 - (void)updateUI
 {
     for (UIButton *cardButton in self.cardButtons) {
@@ -51,6 +56,7 @@
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
     }
+    self.matchModeControl.alpha = self.matchModeControl.enabled ? 1.0: 0.3;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.lastFlipLabel.text = [self.game flipHistoryForFlip:[self.game numberOfFlips]-1];
 }
@@ -64,15 +70,16 @@
 
 - (IBAction)flipCard:(UIButton *)sender
 {
+    self.matchModeControl.enabled = NO;
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
     [self updateUI];
 }
 
-- (IBAction)dealNewGame:(UIButton *)sender
-{
+- (IBAction)dealNewGame {
     self.game = nil;
     self.flipCount = 0;
+    self.matchModeControl.enabled = YES;
     [self updateUI];
 }
 
