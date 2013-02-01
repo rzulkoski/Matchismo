@@ -56,7 +56,7 @@
 {
     Card *card = [self cardAtIndex:index];
     NSMutableArray *otherCardsToMatch = [[NSMutableArray alloc] init];
-    NSString *flipSummary = [[NSString alloc] init];
+    NSString *flipSummary = nil;
     BOOL matchAttempted = NO;
     
     if (!card.isUnplayable) {

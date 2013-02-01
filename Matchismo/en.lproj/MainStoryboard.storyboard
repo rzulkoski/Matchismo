@@ -340,9 +340,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="flipHistoryLabel" destination="mjp-v6-Qln" id="YJu-eY-eV0"/>
                         <outlet property="flipHistorySlider" destination="8nB-J4-dOB" id="RfC-e9-Grm"/>
                         <outlet property="flipsLabel" destination="ufK-bO-F8z" id="9Yu-BY-1vM"/>
-                        <outlet property="lastFlipLabel" destination="mjp-v6-Qln" id="cWY-i9-D9v"/>
                         <outlet property="matchModeControl" destination="JNg-Xd-ZRc" id="xYW-Yb-pyd"/>
                         <outlet property="scoreLabel" destination="LZj-rZ-DCy" id="JFE-09-Nwy"/>
                         <outletCollection property="cardButtons" destination="y3S-gB-bLh" id="Rb7-Dk-vjQ"/>
@@ -373,9 +373,9 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CardGameViewController.h"/>
             <relationships>
                 <relationship kind="action" name="flipCard:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="flipHistoryLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="flipHistorySlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="flipsLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="lastFlipLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="matchModeControl" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="scoreLabel" candidateClass="UILabel"/>
                 <relationship kind="outletCollection" name="cardButtons" candidateClass="UIButton"/>

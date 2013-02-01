@@ -16,9 +16,9 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lastFlipLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeControl;
-@property (strong, nonatomic) NSMutableArray *flipHistory;
+@property (strong, nonatomic) NSMutableArray *flipHistory; // Stores the strings returned from the models flipCard function
+@property (weak, nonatomic) IBOutlet UILabel *flipHistoryLabel;
 @property (weak, nonatomic) IBOutlet UISlider *flipHistorySlider;
 @end
 
@@ -60,51 +60,55 @@
 }
 
 - (IBAction)flipHistorySliderMoved {
-    self.flipHistorySlider.value = floorf(self.flipHistorySlider.value);
+    self.flipHistorySlider.value = floorf(self.flipHistorySlider.value); // Force slider to use integer steps (0.0, 1.0, 2.0, etc...)
     [self updateUI];
-    NSLog(@"Slider Moved To %f", self.flipHistorySlider.value);
 }
 
+// Update our View to match our model's state.
 - (void)updateUI
 {
-    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"];
-    for (UIButton *cardButton in self.cardButtons) {
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        [cardButton setTitle:card.contents forState:UIControlStateSelected];
-        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
+    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"]; // Create an image object for our cardback image so it can be set properly.
+    for (UIButton *cardButton in self.cardButtons) { // Do this to each of our card buttons
+        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]; // Store a copy of the current Card in our collection
+        [cardButton setTitle:card.contents forState:UIControlStateSelected]; // Show contents of card if button is in selected/enabled state.
+        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled]; // Show contents of card if button is in selected/disabled state.
         cardButton.selected = card.isFaceUp;
-        [cardButton setImage:(cardButton.selected) ? nil : cardBackImage forState:UIControlStateNormal];
+        [cardButton setImage:(!cardButton.selected) ? cardBackImage : nil forState:UIControlStateNormal]; // If the cardButton is not selected (face down) then show cardBack, otherwise show face.
         cardButton.enabled = !card.isUnplayable;
-        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
+        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0; // If card isn't in play anymore make it semi-transparent, otherwise it should be fully opaque.
     }
-    self.matchModeControl.alpha = self.matchModeControl.enabled ? 1.0: 0.3;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    self.lastFlipLabel.text = ([self.flipHistory count] > 0) ? [self.flipHistory objectAtIndex:(int)self.flipHistorySlider.value] : nil;
-    self.lastFlipLabel.alpha = (self.flipHistorySlider.value < self.flipHistorySlider.maximumValue) ? 0.3 : 1.0;
+    self.matchModeControl.alpha = self.matchModeControl.enabled ? 1.0: 0.3; // If matchModeControl is enabled make it fully opaque, otherwise is should be semi-transparent.
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score]; // Make the score label match the score from our model.
+    self.flipHistoryLabel.text = ([self.flipHistory count] > 0) ? [self.flipHistory objectAtIndex:(int)self.flipHistorySlider.value] : nil; // If there are flips stored in our flipHistory array then
+                                                                                                                                            // set the current flip being displayed to match the position
+                                                                                                                                            // of the flip slider, otherwise sit it to be an empty string.
+    self.flipHistoryLabel.alpha = (self.flipHistorySlider.value < self.flipHistorySlider.maximumValue) ? 0.3 : 1.0; // If current flipHistory being displayed is not the most recent flip then make it
+                                                                                                                    // semi-transparent, otherwise make it fully opaque.
+    // If the flipHistorySlider's min and max values are identical disable and hide the slider, otherwise enable and show the slider.
     self.flipHistorySlider.enabled = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? NO : YES;
     self.flipHistorySlider.alpha = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? 0.0: 1.0;
+    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount]; // Update the total flip count display (includes flip cards faceUp and faceDown!).
 }
 
-- (void)setFlipCount:(int)flipCount
-{
-    _flipCount = flipCount;
-    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-}
-
+// The user has requested to flip an enabled card. Track history and increment counters and slider as needed.
 - (IBAction)flipCard:(UIButton *)sender
 {
-    self.matchModeControl.enabled = NO;
-    [self.flipHistory addObject:[self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]]];
+    NSString *flipSummary = nil; // Will store the result string returned from asking our model to flip a card.
+    
+    self.matchModeControl.enabled = NO; // Disable the matchModeControl since we know we are now in the middle of a game.
+    flipSummary = [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]]; // Store the result string returned from asking our model to flip a card.
+    if (flipSummary) [self.flipHistory addObject:flipSummary]; // If a result was returned (a card was turned faceUp) then add the summary to our flip history.
     self.flipCount++;
-    self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;
-    self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
+    self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;   // Set the flipHistorySlider's maximum value to match the index of the last object in our flipHistory array.
+    self.flipHistorySlider.value = self.flipHistorySlider.maximumValue; // Move slider current value to reflect the most recent flip.
     [self updateUI];
 }
 
+// Reset the game elements for a new game using a new Deck.
 - (IBAction)dealNewGame {
-    self.game = nil;
+    self.game = nil; // Reset our model
     self.flipCount = 0;
-    self.flipHistory = nil;
+    self.flipHistory = nil; // Reset our flipHistory tracking array.
     self.flipHistorySlider.maximumValue = 0;
     self.flipHistorySlider.value = 0.0;
     self.matchModeControl.enabled = YES;
