@@ -332,11 +332,15 @@
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="8nB-J4-dOB">
                                 <rect key="frame" x="18" y="361" width="284" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="flipHistorySliderMoved" destination="2" eventType="valueChanged" id="fko-74-7YJ"/>
+                                </connections>
                             </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="flipHistorySlider" destination="8nB-J4-dOB" id="RfC-e9-Grm"/>
                         <outlet property="flipsLabel" destination="ufK-bO-F8z" id="9Yu-BY-1vM"/>
                         <outlet property="lastFlipLabel" destination="mjp-v6-Qln" id="cWY-i9-D9v"/>
                         <outlet property="matchModeControl" destination="JNg-Xd-ZRc" id="xYW-Yb-pyd"/>
@@ -361,7 +365,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-52" y="-20"/>
+            <point key="canvasLocation" x="-277" y="-63"/>
         </scene>
     </scenes>
     <classes>
@@ -369,6 +373,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CardGameViewController.h"/>
             <relationships>
                 <relationship kind="action" name="flipCard:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="flipHistorySlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="flipsLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lastFlipLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="matchModeControl" candidateClass="UISegmentedControl"/>

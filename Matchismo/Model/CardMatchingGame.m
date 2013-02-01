@@ -12,7 +12,7 @@
 @property (strong, nonatomic) NSMutableArray *cards; // of Card
 @property (readwrite, nonatomic) int score;
 @property (nonatomic) int numberOfCardsToMatch;
-@property (strong, nonatomic) NSMutableArray *flipHistory; // of NSString
+@property (readwrite, strong, nonatomic) NSMutableArray *flipHistory; // of NSString
 @end
 
 @implementation CardMatchingGame
@@ -27,11 +27,6 @@
 {
     if (!_flipHistory) _flipHistory = [[NSMutableArray alloc] init];
     return _flipHistory;
-}
-
-- (NSString *)flipHistoryForFlip:(NSUInteger)flipIndex
-{
-    return (flipIndex < [self.flipHistory count]) ? [self.flipHistory objectAtIndex:flipIndex] : nil;
 }
 
 - (NSUInteger)numberOfFlips

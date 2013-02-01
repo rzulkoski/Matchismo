@@ -19,10 +19,9 @@
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 
-- (NSString *)flipHistoryForFlip:(NSUInteger)flipIndex;
-
 - (NSUInteger)numberOfFlips;
 
 @property (readonly, nonatomic) int score;
+@property (readonly, strong, nonatomic) NSMutableArray *flipHistory;
 
 @end

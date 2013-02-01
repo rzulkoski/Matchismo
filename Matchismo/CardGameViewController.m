@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastFlipLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeControl;
+@property (weak, nonatomic) IBOutlet UISlider *flipHistorySlider;
 @end
 
 @implementation CardGameViewController
@@ -27,7 +28,10 @@
         [cardButton setImageEdgeInsets:UIEdgeInsetsMake(4.0, 3.0, 5.0, 3.0)];
     }
     CGRect frame = self.matchModeControl.frame;
+    self.flipHistorySlider.minimumValue = 0;
+    self.flipHistorySlider.maximumValue = 0;
     [self.matchModeControl setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 32.0)];
+    [self updateUI];
 }
 
 - (CardMatchingGame *)game
@@ -48,6 +52,11 @@
     [self dealNewGame];
 }
 
+- (IBAction)flipHistorySliderMoved {
+    self.flipHistorySlider.value = floorf(self.flipHistorySlider.value);
+    [self updateUI];
+    NSLog(@"Slider Moved To %f", self.flipHistorySlider.value);
+}
 
 - (void)updateUI
 {
@@ -63,14 +72,16 @@
     }
     self.matchModeControl.alpha = self.matchModeControl.enabled ? 1.0: 0.3;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    self.lastFlipLabel.text = [self.game flipHistoryForFlip:[self.game numberOfFlips]-1];
+    self.lastFlipLabel.text = ([self.game.flipHistory count] > 0) ? [self.game.flipHistory objectAtIndex:(int)self.flipHistorySlider.value] : nil;
+    self.lastFlipLabel.alpha = (self.flipHistorySlider.value < self.flipHistorySlider.maximumValue) ? 0.3 : 1.0;
+    self.flipHistorySlider.enabled = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? NO : YES;
+    self.flipHistorySlider.alpha = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? 0.0: 1.0;
 }
 
 - (void)setFlipCount:(int)flipCount
 {
     _flipCount = flipCount;
     self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-    NSLog(@"flips updated to %d", self.flipCount);
 }
 
 - (IBAction)flipCard:(UIButton *)sender
@@ -78,12 +89,16 @@
     self.matchModeControl.enabled = NO;
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
+    self.flipHistorySlider.maximumValue = [self.game.flipHistory count]-1;
+    self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
     [self updateUI];
 }
 
 - (IBAction)dealNewGame {
     self.game = nil;
     self.flipCount = 0;
+    self.flipHistorySlider.maximumValue = 0;
+    self.flipHistorySlider.value = 0.0;
     self.matchModeControl.enabled = YES;
     [self updateUI];
 }
