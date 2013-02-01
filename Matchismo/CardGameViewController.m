@@ -23,6 +23,9 @@
 @implementation CardGameViewController
 
 - (void)viewDidLoad {
+    for (UIButton *cardButton in self.cardButtons) {
+        [cardButton setImageEdgeInsets:UIEdgeInsetsMake(4.0, 3.0, 5.0, 3.0)];
+    }
     CGRect frame = self.matchModeControl.frame;
     [self.matchModeControl setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 24.0)];
 }
@@ -48,11 +51,13 @@
 
 - (void)updateUI
 {
+    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"];
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
         [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
         cardButton.selected = card.isFaceUp;
+        [cardButton setImage:(cardButton.selected) ? nil : cardBackImage forState:UIControlStateNormal];
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
     }
