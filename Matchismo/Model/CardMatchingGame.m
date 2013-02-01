@@ -12,7 +12,6 @@
 @property (strong, nonatomic) NSMutableArray *cards; // of Card
 @property (readwrite, nonatomic) int score;
 @property (nonatomic) int numberOfCardsToMatch;
-@property (readwrite, strong, nonatomic) NSMutableArray *flipHistory; // of NSString
 @end
 
 @implementation CardMatchingGame
@@ -21,17 +20,6 @@
 {
     if (!_cards) _cards = [[NSMutableArray alloc] init];
     return _cards;
-}
-
-- (NSMutableArray *)flipHistory
-{
-    if (!_flipHistory) _flipHistory = [[NSMutableArray alloc] init];
-    return _flipHistory;
-}
-
-- (NSUInteger)numberOfFlips
-{
-    return [self.flipHistory count];
 }
 
 - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck cardMatchMode:(NSUInteger)numCards
@@ -64,10 +52,11 @@
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
 
-- (void)flipCardAtIndex:(NSUInteger)index
+- (NSString *)flipCardAtIndex:(NSUInteger)index
 {
     Card *card = [self cardAtIndex:index];
     NSMutableArray *otherCardsToMatch = [[NSMutableArray alloc] init];
+    NSString *flipSummary = [[NSString alloc] init];
     BOOL matchAttempted = NO;
     
     if (!card.isUnplayable) {
@@ -84,21 +73,22 @@
                             }
                             card.unplayable = YES;
                             self.score += matchScore * MATCH_BONUS;
-                            [self.flipHistory addObject:[NSString stringWithFormat:@"Matched %@ & %@ for %d points", card, [otherCardsToMatch componentsJoinedByString:@" & "], matchScore * MATCH_BONUS]];
+                            flipSummary = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card, [otherCardsToMatch componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
                         } else {
                             otherCard.faceUp = NO;
                             self.score -= MISMATCH_PENALTY;
-                            [self.flipHistory addObject:[NSString stringWithFormat:@"%@ & %@ don't match! -%d points!", card, [otherCardsToMatch componentsJoinedByString:@" & "], MISMATCH_PENALTY]];
+                            flipSummary = [NSString stringWithFormat:@"%@ & %@ don't match! -%d points!", card, [otherCardsToMatch componentsJoinedByString:@" & "], MISMATCH_PENALTY];
                         }
                         break;
                     }
                 }
             }
             self.score -= FLIP_COST;
-            if (!matchAttempted) [self.flipHistory addObject:[NSString stringWithFormat:@"Flipped up %@", card]];
+            if (!matchAttempted) flipSummary = [NSString stringWithFormat:@"Flipped up %@", card];
         }
         card.faceUp = !card.isFaceUp;
     }
+    return flipSummary;
 }
 
 @end

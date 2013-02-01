@@ -15,13 +15,10 @@
               usingDeck:(Deck *)deck
           cardMatchMode:(NSUInteger)numCards;
 
-- (void)flipCardAtIndex:(NSUInteger)index;
+- (NSString *)flipCardAtIndex:(NSUInteger)index;
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 
-- (NSUInteger)numberOfFlips;
-
 @property (readonly, nonatomic) int score;
-@property (readonly, strong, nonatomic) NSMutableArray *flipHistory;
 
 @end
