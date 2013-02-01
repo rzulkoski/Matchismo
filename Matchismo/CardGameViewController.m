@@ -27,7 +27,7 @@
         [cardButton setImageEdgeInsets:UIEdgeInsetsMake(4.0, 3.0, 5.0, 3.0)];
     }
     CGRect frame = self.matchModeControl.frame;
-    [self.matchModeControl setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 24.0)];
+    [self.matchModeControl setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 32.0)];
 }
 
 - (CardMatchingGame *)game
