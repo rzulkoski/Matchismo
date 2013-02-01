@@ -24,13 +24,13 @@
     } else if (otherCards.count == 2) {
         PlayingCard *secondCard = [otherCards objectAtIndex:0];
         PlayingCard *thirdCard = [otherCards objectAtIndex:1];
-        if ([secondCard.suit isEqualToString:self.suit] && [thirdCard.suit isEqualToString:self.suit]) {
-            score = 1;
-        } else if (([secondCard.suit isEqualToString:self.suit] && thirdCard.rank == self.rank) ||
-                   ([thirdCard.suit isEqualToString:self.suit] && secondCard.rank == self.rank)) {
-            score = 6;
-        } else if (secondCard.rank == self.rank && thirdCard.rank == self.rank) {
-            score = 22;
+        if (secondCard.rank == self.rank && thirdCard.rank == self.rank) {
+            score = 22; // 3 of the same Rank
+        } else if ([secondCard.suit isEqualToString:self.suit] && [thirdCard.suit isEqualToString:self.suit]) {
+            score = 1;  // 3 of the same Suit
+        } else if ((secondCard.rank == self.rank || thirdCard.rank == self.rank || secondCard.rank == thirdCard.rank) &&
+                   ([secondCard.suit isEqualToString:self.suit] || [thirdCard.suit isEqualToString:self.suit] || [secondCard.suit isEqualToString:thirdCard.suit])) {
+            score = 6;  // 2 of the same Rank & 2 of the same Suit
         }
     }
     
