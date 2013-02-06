@@ -55,10 +55,6 @@
     [self updateUI];
 }
 
-- (IBAction)newMatchModeSelected {
-    [self dealNewGame];
-}
-
 - (IBAction)flipHistorySliderMoved {
     self.flipHistorySlider.value = floorf(self.flipHistorySlider.value); // Force slider to use integer steps (0.0, 1.0, 2.0, etc...)
     [self updateUI];
