@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 RZGamer. All rights reserved.
 //
 
-#import "CardGameViewController.h"
+#import "MatchGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
-@interface CardGameViewController ()
+@interface MatchGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
@@ -22,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *flipHistorySlider;
 @end
 
-@implementation CardGameViewController
+@implementation MatchGameViewController
 
 - (void)viewDidLoad {
     for (UIButton *cardButton in self.cardButtons) {

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CardGameViewController : UIViewController
+@interface MatchGameViewController : UIViewController
 
 @end
