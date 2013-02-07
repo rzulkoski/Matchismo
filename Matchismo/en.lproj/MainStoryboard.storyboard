@@ -341,7 +341,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Match" id="TbG-6f-h1u"/>
+                    <tabBarItem key="tabBarItem" title="Match" image="spade_30x30.png" id="TbG-6f-h1u"/>
                     <connections>
                         <outlet property="flipHistoryLabel" destination="mjp-v6-Qln" id="YJu-eY-eV0"/>
                         <outlet property="flipHistorySlider" destination="8nB-J4-dOB" id="RfC-e9-Grm"/>
@@ -888,7 +888,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Set" id="1MX-Bo-Alx"/>
+                    <tabBarItem key="tabBarItem" title="Set" image="square_30x30.png" id="1MX-Bo-Alx"/>
                     <connections>
                         <outlet property="flipHistoryLabel" destination="rLU-T9-oj4" id="TaT-L2-D7a"/>
                         <outlet property="flipHistorySlider" destination="PaR-G8-giq" id="b8x-3T-yg4"/>
@@ -925,6 +925,10 @@
             <point key="canvasLocation" x="-1315" y="140"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="spade_30x30.png" width="30" height="30"/>
+        <image name="square_30x30.png" width="30" height="30"/>
+    </resources>
     <classes>
         <class className="CardGameViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CardGameViewController.h"/>
