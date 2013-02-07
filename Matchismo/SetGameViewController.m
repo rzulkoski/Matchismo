@@ -7,32 +7,40 @@
 //
 
 #import "SetGameViewController.h"
+#import "SetCardDeck.h"
+#import "CardMatchingGame.h"
 
-@interface SetGameViewController ()
-
+@interface CardGameViewController ()
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (strong, nonatomic) CardMatchingGame *game;
 @end
 
 @implementation SetGameViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (Deck *)getDeck
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    return [[SetCardDeck alloc] init];
+}
+
+- (NSUInteger)getCardMatchMode
+{
+    return 3;
+}
+
+- (void)renderCards
+{
+    for (UIButton *cardButton in self.cardButtons) {
+        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
+        if (card.unplayable) {
+            cardButton.selected = NO;
+            [cardButton setAttributedTitle:nil forState:UIControlStateNormal];
+        } else {
+            [cardButton setAttributedTitle:card.attributedContents forState:UIControlStateNormal];
+            [cardButton setAttributedTitle:card.attributedContents forState:UIControlStateSelected];
+            cardButton.selected = card.isFaceUp;
+        }
+        [cardButton setBackgroundColor:(cardButton.isSelected) ? [UIColor lightGrayColor] : nil];
     }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
