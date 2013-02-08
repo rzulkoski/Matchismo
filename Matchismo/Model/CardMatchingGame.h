@@ -14,6 +14,7 @@
 - (id)initWithCardCount:(NSUInteger)cardCount
               usingDeck:(Deck *)deck
           cardMatchMode:(NSUInteger)numCards
+    replaceMatchedCards:(BOOL)replaceMatchedCards
              matchBonus:(NSUInteger)matchBonus
         mismatchPenalty:(NSUInteger)mismatchPenalty
                flipCost:(NSUInteger)flipCost;

@@ -15,6 +15,8 @@
 @property (nonatomic) NSUInteger matchBonus;
 @property (nonatomic) NSUInteger mismatchPenalty;
 @property (nonatomic) NSUInteger flipCost;
+@property (strong, nonatomic) Deck *deck;
+@property (nonatomic) BOOL replaceMatchedCards;
 @end
 
 @implementation CardMatchingGame
@@ -26,7 +28,9 @@
 }
 
 - (id)initWithCardCount:(NSUInteger)count
-              usingDeck:(Deck *)deck cardMatchMode:(NSUInteger)numCards
+              usingDeck:(Deck *)deck
+          cardMatchMode:(NSUInteger)numCards
+     replaceMatchedCards:(BOOL)replaceMatchedCards
              matchBonus:(NSUInteger)matchBonus
         mismatchPenalty:(NSUInteger)mismatchPenalty
                flipCost:(NSUInteger)flipCost
@@ -46,6 +50,8 @@
             self.numberOfCardsToMatch = numCards;
         }
     }
+    self.replaceMatchedCards = replaceMatchedCards;
+    if (self.replaceMatchedCards) self.deck = deck;
     self.matchBonus = matchBonus;
     self.mismatchPenalty = mismatchPenalty;
     self.flipCost = flipCost;
@@ -76,10 +82,29 @@
                         [flipResult addObjectsFromArray:otherCardsToMatch];
                         int matchScore = [card match:otherCardsToMatch];
                         if (matchScore) {
-                            for (Card *cardToMakeUnplayable in otherCardsToMatch) {
-                                cardToMakeUnplayable.unplayable = YES;
+                            for (int i = 0; i < [otherCardsToMatch count]; i++) {
+                                Card *cardToMakeUnplayable = otherCardsToMatch[i];
+                                if (self.replaceMatchedCards) {
+                                    Card *replacementCard = [self.deck drawRandomCard];
+                                    if (replacementCard) {
+                                        self.cards[[self.cards indexOfObjectIdenticalTo:cardToMakeUnplayable]] = replacementCard;
+                                    } else {
+                                        cardToMakeUnplayable.unplayable = YES;
+                                    }
+                                } else {
+                                    cardToMakeUnplayable.unplayable = YES;
+                                }
                             }
-                            card.unplayable = YES;
+                            if (self.replaceMatchedCards) {
+                                Card *replacementCard = [self.deck drawRandomCard];
+                                if (replacementCard) {
+                                    self.cards[[self.cards indexOfObjectIdenticalTo:card]] = replacementCard;
+                                } else {
+                                    card.unplayable = YES;
+                                }
+                            } else {
+                                card.unplayable = YES;
+                            }
                             self.score += matchScore * self.matchBonus;
                             [flipResult insertObject:[NSNumber numberWithInt:matchScore * self.matchBonus] atIndex:0];
                         } else {

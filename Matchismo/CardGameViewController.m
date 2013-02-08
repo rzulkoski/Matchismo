@@ -55,6 +55,7 @@
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                           usingDeck:[self getDeck]
                                                       cardMatchMode:[self getCardMatchMode]
+                                                replaceMatchedCards:YES
                                                          matchBonus:4
                                                     mismatchPenalty:2
                                                            flipCost:1];
