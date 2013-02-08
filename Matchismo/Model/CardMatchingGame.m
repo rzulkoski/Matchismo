@@ -98,4 +98,41 @@
     return [flipResult copy];
 }
 
+- (NSArray *)remainingMoves
+{
+    NSMutableArray *remainingMoves = [[NSMutableArray alloc] init];
+    NSArray *potentialMoves = [self getPotentialMovesFromCards:self.cards numberOfCardsNeeded:self.numberOfCardsToMatch];
+    
+    for (NSArray *potentialMove in potentialMoves) {
+        int matchScore = [potentialMove[0] match:[potentialMove subarrayWithRange:NSMakeRange(1, [potentialMove count]-1)]];
+        if (matchScore) {
+            [remainingMoves addObject:[potentialMove componentsJoinedByString:@" & "]];
+        }
+    }
+    
+    return [remainingMoves copy];
+}
+
+- (NSArray *)getPotentialMovesFromCards:(NSArray *)cards numberOfCardsNeeded:(NSUInteger)numberOfCardsNeeded
+{
+    NSMutableArray *potentialMoves = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [cards count]-numberOfCardsNeeded+1; i++) {
+        Card *card = cards[i];
+        if (!card.isUnplayable) {
+            if (numberOfCardsNeeded == 1) {
+                [potentialMoves addObject:@[card]];
+            } else {
+                NSMutableArray *partialMoves = [[self getPotentialMovesFromCards:[cards subarrayWithRange:NSMakeRange(i+1, [cards count]-i-1)] numberOfCardsNeeded:numberOfCardsNeeded-1] mutableCopy];
+                for (NSArray *partialMove in partialMoves) {
+                    NSArray *potentialMove = [partialMove arrayByAddingObject:card];
+                    [potentialMoves addObject:potentialMove];
+                }
+            }
+        }
+    }
+    
+    return [potentialMoves copy];
+}
+
 @end

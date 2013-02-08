@@ -19,7 +19,7 @@
                flipCost:(NSUInteger)flipCost;
 
 - (NSArray *)flipCardAtIndex:(NSUInteger)index;
-
+- (NSArray *)remainingMoves;
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (readonly, nonatomic) int score;

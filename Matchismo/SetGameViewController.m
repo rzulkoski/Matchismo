@@ -10,6 +10,8 @@
 #import "SetCardDeck.h"
 #import "CardMatchingGame.h"
 
+#define CARD_MATCH_MODE 3
+
 @interface CardGameViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
@@ -24,7 +26,7 @@
 
 - (NSUInteger)getCardMatchMode
 {
-    return 3;
+    return CARD_MATCH_MODE;
 }
 
 - (void)renderCards

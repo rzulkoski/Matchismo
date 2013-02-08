@@ -10,6 +10,8 @@
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
+#define CARD_MATCH_MODE 2
+
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
@@ -66,7 +68,7 @@
 
 - (NSUInteger)getCardMatchMode
 {
-    return 2;
+    return CARD_MATCH_MODE;
 }
 
 - (void)setCardButtons:(NSArray *)cardButtons
@@ -123,7 +125,39 @@
     self.flipCount++;
     self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;
     self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
+    [self logRemainingMovesToConsole];
+    [self checkGameOver];
     [self updateUI];
+}
+
+- (void)checkGameOver
+{
+    NSArray *remainingMoves = [self.game remainingMoves];
+    if ([remainingMoves count] == 0) {
+        UIAlertView *gameOverAlert = [[UIAlertView alloc] initWithTitle:@"Game Over" message:[NSString stringWithFormat:@"No moves remaining. You scored %d total points.", self.game.score] delegate:self cancelButtonTitle:@"New Game" otherButtonTitles:nil];
+        [gameOverAlert show];
+        
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dealNewGame];
+}
+
+- (void)logRemainingMovesToConsole
+{
+    NSArray *remainingMoves = [self.game remainingMoves];
+    NSLog(@"\n");
+    if ([remainingMoves count] == 0) {
+        NSLog(@"Game Over: No Remaining Moves!");
+    } else {
+        NSLog(@"Remaining Moves:");
+        NSLog(@"================");
+        for (NSString *move in remainingMoves) {
+            NSLog(@"%@", move);
+        }
+    }
 }
 
 - (NSMutableAttributedString *)parseFlipResult:(NSArray *)flipResult

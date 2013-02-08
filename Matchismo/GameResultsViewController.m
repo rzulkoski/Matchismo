@@ -2,7 +2,7 @@
 //  GameResultsViewController.m
 //  Matchismo
 //
-//  Created by Ryan Zulkoski on 2/6/13.
+//  Created by Ryan Zulkoski on 2/7/13.
 //  Copyright (c) 2013 RZGamer. All rights reserved.
 //
 
