@@ -19,6 +19,11 @@
 
 @implementation SetGameViewController
 
+- (NSString *)gameName
+{
+    return @"Set";
+}
+
 - (Deck *)getDeck
 {
     return [[SetCardDeck alloc] init];

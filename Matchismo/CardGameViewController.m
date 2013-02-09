@@ -9,6 +9,7 @@
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
+#import "GameResult.h"
 
 #define CARD_MATCH_MODE 2
 
@@ -22,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *flipHistoryLabel;
 @property (weak, nonatomic) IBOutlet UISlider *flipHistorySlider;
 @property (strong, nonatomic) NSDictionary *flipSummaryAttributes;
+@property (strong, nonatomic) GameResult *gameResult;
 @end
 
 @implementation CardGameViewController
@@ -30,6 +32,20 @@
     self.flipHistorySlider.minimumValue = 0;
     self.flipHistorySlider.maximumValue = 0;
     [self updateUI];
+}
+
+- (GameResult *)gameResult
+{
+    if (!_gameResult) {
+        _gameResult = [[GameResult alloc] init];
+        _gameResult.game = [self gameName];
+    }
+    return _gameResult;
+}
+
+- (NSString *)gameName
+{
+    return @"Match";
 }
 
 - (NSDictionary *)flipSummaryAttributes
@@ -129,6 +145,7 @@
     [self logRemainingMovesToConsole];
     [self checkGameOver];
     [self updateUI];
+    self.gameResult.score = self.game.score;
 }
 
 - (void)checkGameOver
@@ -210,6 +227,7 @@
 // Reset the game elements for a new game using a new Deck.
 - (IBAction)dealNewGame {
     self.game = nil; // Reset our model
+    self.gameResult = nil;
     self.flipCount = 0;
     self.flipHistory = nil; // Reset our flipHistory tracking array.
     self.flipHistorySlider.maximumValue = 0;
