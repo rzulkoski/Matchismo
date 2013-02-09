@@ -69,7 +69,6 @@
     Card *card = [self cardAtIndex:index];
     NSMutableArray *otherCardsToMatch = [[NSMutableArray alloc] init];
     NSMutableArray *flipResult = [[NSMutableArray alloc] init];
-    BOOL matchAttempted = NO;
     
     if (!card.isUnplayable) {
         if (!card.isFaceUp) {
@@ -78,32 +77,12 @@
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
                     [otherCardsToMatch addObject:otherCard];
                     if ([otherCardsToMatch count]+1 == self.numberOfCardsToMatch) {
-                        matchAttempted = YES;
                         [flipResult addObjectsFromArray:otherCardsToMatch];
                         int matchScore = [card match:otherCardsToMatch];
                         if (matchScore) {
-                            for (int i = 0; i < [otherCardsToMatch count]; i++) {
-                                Card *cardToMakeUnplayable = otherCardsToMatch[i];
-                                if (self.replaceMatchedCards) {
-                                    Card *replacementCard = [self.deck drawRandomCard];
-                                    if (replacementCard) {
-                                        self.cards[[self.cards indexOfObjectIdenticalTo:cardToMakeUnplayable]] = replacementCard;
-                                    } else {
-                                        cardToMakeUnplayable.unplayable = YES;
-                                    }
-                                } else {
-                                    cardToMakeUnplayable.unplayable = YES;
-                                }
-                            }
-                            if (self.replaceMatchedCards) {
-                                Card *replacementCard = [self.deck drawRandomCard];
-                                if (replacementCard) {
-                                    self.cards[[self.cards indexOfObjectIdenticalTo:card]] = replacementCard;
-                                } else {
-                                    card.unplayable = YES;
-                                }
-                            } else {
-                                card.unplayable = YES;
+                            if (!self.replaceMatchedCards || ![self replaceCard:card]) card.unplayable = YES;
+                            for (Card *cardToReplaceOrMakeUnplayable in otherCardsToMatch) {
+                                if (!self.replaceMatchedCards || ![self replaceCard:cardToReplaceOrMakeUnplayable]) cardToReplaceOrMakeUnplayable.unplayable = YES;
                             }
                             self.score += matchScore * self.matchBonus;
                             [flipResult insertObject:[NSNumber numberWithInt:matchScore * self.matchBonus] atIndex:0];
@@ -123,6 +102,19 @@
     return [flipResult copy];
 }
 
+- (BOOL)replaceCard:(Card *)card
+{
+    BOOL cardDrawn = NO;
+    
+    Card *replacementCard = [self.deck drawRandomCard];
+    if (replacementCard) {
+        cardDrawn = YES;
+        self.cards[[self.cards indexOfObjectIdenticalTo:card]] = replacementCard;
+    }
+    
+    return cardDrawn;
+}
+
 - (NSArray *)remainingMoves
 {
     NSMutableArray *remainingMoves = [[NSMutableArray alloc] init];
@@ -131,9 +123,10 @@
     for (NSArray *potentialMove in potentialMoves) {
         int matchScore = [potentialMove[0] match:[potentialMove subarrayWithRange:NSMakeRange(1, [potentialMove count]-1)]];
         if (matchScore) {
-            [remainingMoves addObject:[potentialMove componentsJoinedByString:@" & "]];
+            [remainingMoves addObject:[[potentialMove componentsJoinedByString:@" & "] stringByAppendingFormat:@" (%d point%@)", matchScore, matchScore == 1 ? @"" : @"s"]];
         }
     }
+    
     
     return [remainingMoves copy];
 }
