@@ -72,13 +72,17 @@
     
     if (!card.isUnplayable) {
         if (!card.isFaceUp) {
+            card.flipped = YES;
             [flipResult addObject:card];
+            
             for (Card *otherCard in self.cards) {
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
                     [otherCardsToMatch addObject:otherCard];
+                    
                     if ([otherCardsToMatch count]+1 == self.numberOfCardsToMatch) {
                         [flipResult addObjectsFromArray:otherCardsToMatch];
                         int matchScore = [card match:otherCardsToMatch];
+                        
                         if (matchScore) {
                             if (!self.replaceMatchedCards || ![self replaceCard:card]) card.unplayable = YES;
                             for (Card *cardToReplaceOrMakeUnplayable in otherCardsToMatch) {
@@ -99,6 +103,11 @@
         }
         card.faceUp = !card.isFaceUp;
     }
+    NSLog(@"\n*************");
+    for (Card *aCard in self.cards) {
+        NSLog(@"%@%@ flipped = %@", aCard, [aCard.contents length] == 2 ? @" " : @"", aCard.hasBeenFlipped ? @"YES" : @"NO");
+    }
+    
     return [flipResult copy];
 }
 
