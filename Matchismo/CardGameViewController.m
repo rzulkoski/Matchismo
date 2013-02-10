@@ -143,7 +143,7 @@
     self.flipCount++;
     self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;
     self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
-    //[self logRemainingMovesToConsole];
+    [self logRemainingMovesToConsole];
     [self checkGameOver];
     [self updateUI];
     self.gameResult.score = self.game.score;

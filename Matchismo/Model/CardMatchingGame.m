@@ -67,25 +67,19 @@
 - (NSArray *)flipCardAtIndex:(NSUInteger)index
 {
     Card *card = [self cardAtIndex:index];
-    NSMutableArray *otherCardsToMatch = [[NSMutableArray alloc] init];
     NSMutableArray *flipResult = [[NSMutableArray alloc] init];
     
     if (!card.isUnplayable) {
         if (!card.isFaceUp) {
             card.flipped = YES;
             [flipResult addObject:card];
-            
             for (Card *otherCard in self.cards) {
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
-                    [otherCardsToMatch addObject:otherCard];
-                    
-                    if ([otherCardsToMatch count]+1 == self.numberOfCardsToMatch) {
-                        [flipResult addObjectsFromArray:otherCardsToMatch];
-                        int matchScore = [card match:otherCardsToMatch];
-                        
+                    [flipResult addObject:otherCard];
+                    if ([flipResult count] == self.numberOfCardsToMatch) {
+                        int matchScore = [flipResult[0] match:[flipResult subarrayWithRange:NSMakeRange(1, [flipResult count]-1)]];
                         if (matchScore) {
-                            if (!self.replaceMatchedCards || ![self replaceCard:card]) card.unplayable = YES;
-                            for (Card *cardToReplaceOrMakeUnplayable in otherCardsToMatch) {
+                            for (Card *cardToReplaceOrMakeUnplayable in flipResult) {
                                 if (!self.replaceMatchedCards || ![self replaceCard:cardToReplaceOrMakeUnplayable]) cardToReplaceOrMakeUnplayable.unplayable = YES;
                             }
                             self.score += matchScore * self.matchBonus;
@@ -102,10 +96,6 @@
             self.score -= self.flipCost;
         }
         card.faceUp = !card.isFaceUp;
-    }
-    NSLog(@"\n*************");
-    for (Card *aCard in self.cards) {
-        NSLog(@"%@%@ flipped = %@", aCard, [aCard.contents length] == 2 ? @" " : @"", aCard.hasBeenFlipped ? @"YES" : @"NO");
     }
     
     return [flipResult copy];

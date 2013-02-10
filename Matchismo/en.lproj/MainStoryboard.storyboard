@@ -432,7 +432,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Match" image="spade_30x30.png" id="TbG-6f-h1u"/>
                     <connections>
-                        <outlet property="flipHistoryLabel" destination="mjp-v6-Qln" id="YJu-eY-eV0"/>
+                        <outlet property="flipHistoryLabel" destination="mjp-v6-Qln" id="wbX-ix-gLd"/>
                         <outlet property="flipHistorySlider" destination="8nB-J4-dOB" id="RfC-e9-Grm"/>
                         <outlet property="flipsLabel" destination="ufK-bO-F8z" id="9Yu-BY-1vM"/>
                         <outlet property="scoreLabel" destination="LZj-rZ-DCy" id="JFE-09-Nwy"/>
@@ -979,7 +979,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Set" image="square_30x30.png" id="1MX-Bo-Alx"/>
                     <connections>
-                        <outlet property="flipHistoryLabel" destination="rLU-T9-oj4" id="TaT-L2-D7a"/>
+                        <outlet property="flipHistoryLabel" destination="rLU-T9-oj4" id="lJl-LT-Fq5"/>
                         <outlet property="flipHistorySlider" destination="PaR-G8-giq" id="b8x-3T-yg4"/>
                         <outlet property="flipsLabel" destination="eqy-Vr-Npw" id="73i-Ev-H7v"/>
                         <outlet property="scoreLabel" destination="IPc-Ao-wec" id="8Wu-Qp-3WE"/>
