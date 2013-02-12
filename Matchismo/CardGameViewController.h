@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CardGameViewController : UIViewController <UIAlertViewDelegate>
+@interface CardGameViewController : UIViewController
 
 @end

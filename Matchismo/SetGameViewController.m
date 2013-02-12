@@ -9,7 +9,6 @@
 #import "SetGameViewController.h"
 #import "SetCardDeck.h"
 #import "CardMatchingGame.h"
-#import "Settings.h"
 
 #define CARD_MATCH_MODE 3
 
@@ -32,7 +31,6 @@
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                           usingDeck:[[SetCardDeck alloc] init]
                                                       cardMatchMode:CARD_MATCH_MODE
-                                                replaceMatchedCards:[Settings replaceMatchedCards]
                                                          matchBonus:4
                                                     mismatchPenalty:2
                                                            flipCost:1];

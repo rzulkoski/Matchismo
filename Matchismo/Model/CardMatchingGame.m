@@ -16,7 +16,6 @@
 @property (nonatomic) NSUInteger mismatchPenalty;
 @property (nonatomic) NSUInteger flipCost;
 @property (strong, nonatomic) Deck *deck;
-@property (nonatomic) BOOL replaceMatchedCards;
 @end
 
 @implementation CardMatchingGame
@@ -30,7 +29,6 @@
 - (id)initWithCardCount:(NSUInteger)count
               usingDeck:(Deck *)deck
           cardMatchMode:(NSUInteger)numCards
-     replaceMatchedCards:(BOOL)replaceMatchedCards
              matchBonus:(NSUInteger)matchBonus
         mismatchPenalty:(NSUInteger)mismatchPenalty
                flipCost:(NSUInteger)flipCost
@@ -50,8 +48,6 @@
             self.numberOfCardsToMatch = numCards;
         }
     }
-    self.replaceMatchedCards = replaceMatchedCards;
-    if (self.replaceMatchedCards) self.deck = deck;
     self.matchBonus = matchBonus;
     self.mismatchPenalty = mismatchPenalty;
     self.flipCost = flipCost;
@@ -71,7 +67,6 @@
     
     if (!card.isUnplayable) {
         if (!card.isFaceUp) {
-            card.flipped = YES;
             [flipResult addObject:card];
             for (Card *otherCard in self.cards) {
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
@@ -79,8 +74,8 @@
                     if ([flipResult count] == self.numberOfCardsToMatch) {
                         int matchScore = [flipResult[0] match:[flipResult subarrayWithRange:NSMakeRange(1, [flipResult count]-1)]];
                         if (matchScore) {
-                            for (Card *cardToReplaceOrMakeUnplayable in flipResult) {
-                                if (!self.replaceMatchedCards || ![self replaceCard:cardToReplaceOrMakeUnplayable]) cardToReplaceOrMakeUnplayable.unplayable = YES;
+                            for (Card *cardToMakeUnplayable in flipResult) {
+                                cardToMakeUnplayable.unplayable = YES;
                             }
                             self.score += matchScore * self.matchBonus;
                             [flipResult insertObject:[NSNumber numberWithInt:matchScore * self.matchBonus] atIndex:0];
@@ -99,57 +94,6 @@
     }
     
     return [flipResult copy];
-}
-
-- (BOOL)replaceCard:(Card *)card
-{
-    BOOL cardDrawn = NO;
-    
-    Card *replacementCard = [self.deck drawRandomCard];
-    if (replacementCard) {
-        cardDrawn = YES;
-        self.cards[[self.cards indexOfObjectIdenticalTo:card]] = replacementCard;
-    }
-    
-    return cardDrawn;
-}
-
-- (NSArray *)remainingMoves
-{
-    NSMutableArray *remainingMoves = [[NSMutableArray alloc] init];
-    NSArray *potentialMoves = [self getPotentialMovesFromCards:self.cards numberOfCardsNeeded:self.numberOfCardsToMatch];
-    
-    for (NSArray *potentialMove in potentialMoves) {
-        int matchScore = [potentialMove[0] match:[potentialMove subarrayWithRange:NSMakeRange(1, [potentialMove count]-1)]];
-        if (matchScore) {
-            [remainingMoves addObject:[[potentialMove componentsJoinedByString:@" & "] stringByAppendingFormat:@" (%d point%@)", matchScore, matchScore == 1 ? @"" : @"s"]];
-        }
-    }
-    
-    
-    return [remainingMoves copy];
-}
-
-- (NSArray *)getPotentialMovesFromCards:(NSArray *)cards numberOfCardsNeeded:(NSUInteger)numberOfCardsNeeded
-{
-    NSMutableArray *potentialMoves = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < [cards count]-numberOfCardsNeeded+1; i++) {
-        Card *card = cards[i];
-        if (!card.isUnplayable) {
-            if (numberOfCardsNeeded == 1) {
-                [potentialMoves addObject:@[card]];
-            } else {
-                NSMutableArray *partialMoves = [[self getPotentialMovesFromCards:[cards subarrayWithRange:NSMakeRange(i+1, [cards count]-i-1)] numberOfCardsNeeded:numberOfCardsNeeded-1] mutableCopy];
-                for (NSArray *partialMove in partialMoves) {
-                    NSArray *potentialMove = [partialMove arrayByAddingObject:card];
-                    [potentialMoves addObject:potentialMove];
-                }
-            }
-        }
-    }
-    
-    return [potentialMoves copy];
 }
 
 @end

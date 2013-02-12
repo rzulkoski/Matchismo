@@ -10,7 +10,6 @@
 #import "Deck.h"
 #import "CardMatchingGame.h"
 #import "GameResult.h"
-#import "Settings.h"
 
 #define CARD_MATCH_MODE 2
 
@@ -72,7 +71,6 @@
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                           usingDeck:[[Deck alloc] init]
                                                       cardMatchMode:CARD_MATCH_MODE
-                                                replaceMatchedCards:[Settings replaceMatchedCards]
                                                          matchBonus:4
                                                     mismatchPenalty:2
                                                            flipCost:1];
@@ -121,7 +119,6 @@
 // The user has requested to flip an enabled card. Track history and increment counters and slider as needed.
 - (IBAction)flipCard:(UIButton *)sender
 {
-    NSLog(@"Flip card pressed!");
     NSArray *flipResult = nil;
     NSMutableAttributedString *flipSummary = nil;
     
@@ -131,40 +128,13 @@
     self.flipCount++;
     self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;
     self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
-    [self logRemainingMovesToConsole];
-    [self checkGameOver];
     [self updateUI];
     self.gameResult.score = self.game.score;
-}
-
-- (void)checkGameOver
-{
-    NSArray *remainingMoves = [self.game remainingMoves];
-    if ([remainingMoves count] == 0) {
-        UIAlertView *gameOverAlert = [[UIAlertView alloc] initWithTitle:@"Game Over" message:[NSString stringWithFormat:@"No moves remaining. You scored %d total points.", self.game.score] delegate:self cancelButtonTitle:@"New Game" otherButtonTitles:nil];
-        [gameOverAlert show];
-        
-    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self dealNewGame];
-}
-
-- (void)logRemainingMovesToConsole
-{
-    NSArray *remainingMoves = [self.game remainingMoves];
-    NSLog(@"\n");
-    if ([remainingMoves count] == 0) {
-        NSLog(@"Game Over: No Remaining Moves!");
-    } else {
-        NSLog(@"Remaining Moves:");
-        NSLog(@"================");
-        for (NSString *move in remainingMoves) {
-            NSLog(@"%@", move);
-        }
-    }
 }
 
 - (NSMutableAttributedString *)parseFlipResult:(NSArray *)flipResult

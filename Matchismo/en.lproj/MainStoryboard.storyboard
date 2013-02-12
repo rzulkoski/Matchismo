@@ -99,27 +99,10 @@
                                     <action selector="resetAllScoresPushed" destination="qP2-Tp-lUz" eventType="touchUpInside" id="io7-vn-86K"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Qey-Z1-glB">
-                                <rect key="frame" x="223" y="20" width="79" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="replaceMatchedCardsSwitchChangedState" destination="qP2-Tp-lUz" eventType="valueChanged" id="5gL-nX-rWc"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Replace Matched Cards:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DoB-iz-oj7">
-                                <rect key="frame" x="20" y="23" width="201" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gear_30x30.png" id="f7W-fJ-Aqz"/>
-                    <connections>
-                        <outlet property="replaceMatchedCardsSwitch" destination="Qey-Z1-glB" id="bMG-4b-Wqw"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRB-t8-lQN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -7,7 +7,6 @@
 //
 
 #import "SettingsViewController.h"
-#import "Settings.h"
 #import "GameResult.h"
 
 @interface SettingsViewController ()
@@ -15,16 +14,6 @@
 @end
 
 @implementation SettingsViewController
-
-- (void)viewDidLoad
-{
-    self.replaceMatchedCardsSwitch.on = [Settings replaceMatchedCards];
-}
-
-- (IBAction)replaceMatchedCardsSwitchChangedState
-{
-    [Settings setReplaceMatchedCards:self.replaceMatchedCardsSwitch.on];
-}
 
 - (IBAction)resetAllScoresPushed
 {
