@@ -17,6 +17,11 @@
 		948384BE16C45BFD00BE22F2 /* GameResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 948384BD16C45BFD00BE22F2 /* GameResultViewController.m */; };
 		94AE676416C7059C0006550D /* cardback.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676316C7059C0006550D /* cardback.png */; };
 		94AE676616C806690006550D /* cardHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676516C806690006550D /* cardHighlight.png */; };
+		94AE676916C8518C0006550D /* trophy_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676716C8518C0006550D /* trophy_30x30.png */; };
+		94AE676A16C8518C0006550D /* trophy_60x60.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676816C8518C0006550D /* trophy_60x60.png */; };
+		94AE676D16CA9A670006550D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AE676C16CA9A670006550D /* SettingsViewController.m */; };
+		94AE677016CA9F190006550D /* gear_30x30.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676E16CA9F190006550D /* gear_30x30.png */; };
+		94AE677116CA9F190006550D /* gear_60x60.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AE676F16CA9F190006550D /* gear_60x60.png */; };
 		94C4C0A916B9A44300754D57 /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C4C0A816B9A44300754D57 /* CardMatchingGame.m */; };
 		94D9D20116B8E36E00CB6E14 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D9D20016B8E36E00CB6E14 /* Card.m */; };
 		94D9D20416B8E39C00CB6E14 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D9D20316B8E39C00CB6E14 /* Deck.m */; };
@@ -51,6 +56,12 @@
 		948384BD16C45BFD00BE22F2 /* GameResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameResultViewController.m; sourceTree = "<group>"; };
 		94AE676316C7059C0006550D /* cardback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardback.png; sourceTree = "<group>"; };
 		94AE676516C806690006550D /* cardHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardHighlight.png; sourceTree = "<group>"; };
+		94AE676716C8518C0006550D /* trophy_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trophy_30x30.png; sourceTree = "<group>"; };
+		94AE676816C8518C0006550D /* trophy_60x60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trophy_60x60.png; sourceTree = "<group>"; };
+		94AE676B16CA9A670006550D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		94AE676C16CA9A670006550D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		94AE676E16CA9F190006550D /* gear_30x30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_30x30.png; sourceTree = "<group>"; };
+		94AE676F16CA9F190006550D /* gear_60x60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_60x60.png; sourceTree = "<group>"; };
 		94C4C0A716B9A44300754D57 /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = "<group>"; };
 		94C4C0A816B9A44300754D57 /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = "<group>"; };
 		94D9D1FF16B8E36E00CB6E14 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Model/Card.h; sourceTree = "<group>"; };
@@ -156,6 +167,8 @@
 				948384BD16C45BFD00BE22F2 /* GameResultViewController.m */,
 				94DAB9E716C569F3002BFEDB /* GameResult.h */,
 				94DAB9E816C569F3002BFEDB /* GameResult.m */,
+				94AE676B16CA9A670006550D /* SettingsViewController.h */,
+				94AE676C16CA9A670006550D /* SettingsViewController.m */,
 				94EC08E416B8D0EE00AC2F84 /* Supporting Files */,
 			);
 			path = Matchismo;
@@ -164,6 +177,10 @@
 		94EC08E416B8D0EE00AC2F84 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				94AE676E16CA9F190006550D /* gear_30x30.png */,
+				94AE676F16CA9F190006550D /* gear_60x60.png */,
+				94AE676716C8518C0006550D /* trophy_30x30.png */,
+				94AE676816C8518C0006550D /* trophy_60x60.png */,
 				94AE676516C806690006550D /* cardHighlight.png */,
 				94AE676316C7059C0006550D /* cardback.png */,
 				940B05E016C458B5003D5F41 /* spade_30x30.png */,
@@ -246,6 +263,10 @@
 				940B05E716C45A39003D5F41 /* square_60x60.png in Resources */,
 				94AE676416C7059C0006550D /* cardback.png in Resources */,
 				94AE676616C806690006550D /* cardHighlight.png in Resources */,
+				94AE676916C8518C0006550D /* trophy_30x30.png in Resources */,
+				94AE676A16C8518C0006550D /* trophy_60x60.png in Resources */,
+				94AE677016CA9F190006550D /* gear_30x30.png in Resources */,
+				94AE677116CA9F190006550D /* gear_60x60.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +290,7 @@
 				945770B516C312D900FDDD84 /* SetCardDeck.m in Sources */,
 				948384BE16C45BFD00BE22F2 /* GameResultViewController.m in Sources */,
 				94DAB9E916C569F3002BFEDB /* GameResult.m in Sources */,
+				94AE676D16CA9A670006550D /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

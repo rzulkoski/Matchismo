@@ -94,6 +94,13 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
++ (void)resetAllScores
+{
+    NSMutableDictionary *emptyMutableGameResultsForUserDefaults = [[NSMutableDictionary alloc] init];
+    [[NSUserDefaults standardUserDefaults] setObject:emptyMutableGameResultsForUserDefaults forKey:ALL_RESULTS_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (id)asPropertyList
 {
     return @{ START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score), GAME_KEY : self.game };
