@@ -7,14 +7,24 @@
 //
 
 #import "SettingsViewController.h"
+#import "Settings.h"
 #import "GameResult.h"
 
 @interface SettingsViewController ()
-
+@property (weak, nonatomic) IBOutlet UISwitch *replaceMatchedCardsSwitch;
 @end
 
 @implementation SettingsViewController
 
+- (void)viewDidLoad
+{
+    self.replaceMatchedCardsSwitch.on = [Settings replaceMatchedCards];
+}
+
+- (IBAction)replaceMatchedCardsSwitchChangedState
+{
+    [Settings setReplaceMatchedCards:self.replaceMatchedCardsSwitch.on];
+}
 
 - (IBAction)resetAllScoresPushed
 {

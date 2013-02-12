@@ -7,9 +7,10 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
+#import "Deck.h"
 #import "CardMatchingGame.h"
 #import "GameResult.h"
+#import "Settings.h"
 
 #define CARD_MATCH_MODE 2
 
@@ -45,7 +46,7 @@
 
 - (NSString *)gameName
 {
-    return @"Match";
+    return @"Undefined";
 }
 
 - (NSDictionary *)flipSummaryAttributes
@@ -69,23 +70,13 @@
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                          usingDeck:[self getDeck]
-                                                      cardMatchMode:[self getCardMatchMode]
-                                                replaceMatchedCards:YES
+                                                          usingDeck:[[Deck alloc] init]
+                                                      cardMatchMode:CARD_MATCH_MODE
+                                                replaceMatchedCards:[Settings replaceMatchedCards]
                                                          matchBonus:4
                                                     mismatchPenalty:2
                                                            flipCost:1];
     return _game;
-}
-
-- (Deck *)getDeck
-{
-    return [[PlayingCardDeck alloc] init];
-}
-
-- (NSUInteger)getCardMatchMode
-{
-    return CARD_MATCH_MODE;
 }
 
 - (void)setCardButtons:(NSArray *)cardButtons
@@ -117,15 +108,11 @@
 
 - (void)renderCards
 {
-    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"]; // Create an image object for our cardback image so it can be set properly.
-    UIImage *cardHighlightImage = [UIImage imageNamed:@"cardHighlight.png"];
     for (UIButton *cardButton in self.cardButtons) { // Do this to each of our card buttons
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]; // Store a copy of the current Card in our collection
         [cardButton setTitle:card.contents forState:UIControlStateSelected]; // Show contents of card if button is in selected/enabled state.
         [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled]; // Show contents of card if button is in selected/disabled state.
         cardButton.selected = card.isFaceUp;
-        [cardButton setImage:(!cardButton.selected) ? cardBackImage : nil forState:UIControlStateNormal]; // If the cardButton is not selected (face down) then show cardBack, otherwise show face.
-        [cardButton setBackgroundImage:(!card.hasBeenFlipped) ? cardHighlightImage : nil forState:UIControlStateNormal];
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0; // If card isn't in play anymore make it semi-transparent, otherwise it should be fully opaque.
     }
@@ -134,6 +121,7 @@
 // The user has requested to flip an enabled card. Track history and increment counters and slider as needed.
 - (IBAction)flipCard:(UIButton *)sender
 {
+    NSLog(@"Flip card pressed!");
     NSArray *flipResult = nil;
     NSMutableAttributedString *flipSummary = nil;
     
