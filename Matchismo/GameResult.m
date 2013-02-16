@@ -19,7 +19,6 @@
 #define START_KEY @"StartDate"
 #define END_KEY @"EndDate"
 #define SCORE_KEY @"Score"
-#define GAME_KEY @"Game"
 
 + (NSArray *)allGameResults
 {
@@ -78,7 +77,6 @@
             _start = resultDictionary[START_KEY];
             _end = resultDictionary[END_KEY];
             _score = [resultDictionary[SCORE_KEY] intValue];
-            _game = resultDictionary[GAME_KEY];
             if (!_start || !_end) self = nil;
         }
     }
@@ -103,7 +101,7 @@
 
 - (id)asPropertyList
 {
-    return @{ START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score), GAME_KEY : self.game };
+    return @{ START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score) };
 }
 
 // designated initializer
@@ -113,7 +111,6 @@
     if (self) {
         _start = [NSDate date];
         _end = _start;
-        _game = @"Game Undefined";
     }
     return self;
 }

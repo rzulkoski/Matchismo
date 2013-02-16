@@ -25,7 +25,7 @@
     NSSortDescriptor *sortOrder = [NSSortDescriptor sortDescriptorWithKey:nil ascending:self.sortInAscendingOrder selector:self.sortBySelector];
     [dateFormatter setDateFormat:formatString];
     for (GameResult *result in [[GameResult allGameResults] sortedArrayUsingDescriptors:@[sortOrder]]) {
-        displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0gs) %@\n", result.score, [dateFormatter stringFromDate:result.end], round(result.duration), result.game];
+        displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0gs)\n", result.score, [dateFormatter stringFromDate:result.end], round(result.duration)];
     }
     self.display.text = displayText;
 }

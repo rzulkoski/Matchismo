@@ -7,69 +7,54 @@
 //
 
 #import "CardGameViewController.h"
-#import "Deck.h"
 #import "CardMatchingGame.h"
 #import "GameResult.h"
 
 #define CARD_MATCH_MODE 2
 
-@interface CardGameViewController ()
+@interface CardGameViewController () <UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (strong, nonatomic) NSMutableArray *flipHistory; // Stores the strings returned from the models flipCard function
-@property (weak, nonatomic) IBOutlet UILabel *flipHistoryLabel;
-@property (weak, nonatomic) IBOutlet UISlider *flipHistorySlider;
-@property (strong, nonatomic) NSDictionary *flipSummaryAttributes;
 @property (strong, nonatomic) GameResult *gameResult;
+@property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
 @end
 
 @implementation CardGameViewController
 
-- (void)viewDidLoad {
-    self.flipHistorySlider.minimumValue = 0;
-    self.flipHistorySlider.maximumValue = 0;
-    [self updateUI];
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
 }
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section
+{
+    return self.startingCardCount;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingCard" forIndexPath:indexPath];
+    Card *card = [self.game cardAtIndex:indexPath.item];
+    [self updateCell:cell usingCard:card animate:NO];
+    return cell;
+}
+
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animate:(BOOL)animate { } //abstract
 
 - (GameResult *)gameResult
 {
-    if (!_gameResult) {
-        _gameResult = [[GameResult alloc] init];
-        _gameResult.game = [self gameName];
-    }
+    if (!_gameResult) _gameResult = [[GameResult alloc] init];
     return _gameResult;
-}
-
-- (NSString *)gameName
-{
-    return @"Undefined";
-}
-
-- (NSDictionary *)flipSummaryAttributes
-{
-    if (!_flipSummaryAttributes) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setAlignment:NSTextAlignmentCenter];
-        _flipSummaryAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:12],
-                                    NSParagraphStyleAttributeName : paragraphStyle };
-    }
-        
-    return _flipSummaryAttributes;
-}
-
-- (NSMutableArray *)flipHistory
-{
-    if (!_flipHistory) _flipHistory = [[NSMutableArray alloc] init];
-    return _flipHistory;
 }
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                          usingDeck:[[Deck alloc] init]
+    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.startingCardCount
+                                                          usingDeck:[self createDeck]
                                                       cardMatchMode:CARD_MATCH_MODE
                                                          matchBonus:4
                                                     mismatchPenalty:2
@@ -77,64 +62,46 @@
     return _game;
 }
 
-- (void)setCardButtons:(NSArray *)cardButtons
-{
-    _cardButtons = cardButtons;
-    [self updateUI];
-}
+- (Deck *)createDeck { return nil; } // abstract
 
-- (IBAction)flipHistorySliderMoved {
-    self.flipHistorySlider.value = floorf(self.flipHistorySlider.value); // Force slider to use integer steps (0.0, 1.0, 2.0, etc...)
-    [self updateUI];
-}
-
-// Update our View to match our model's state.
 - (void)updateUI
 {
-    [self renderCards];
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score]; // Make the score label match the score from our model.
-    self.flipHistoryLabel.attributedText = ([self.flipHistory count] > 0) ? [self.flipHistory objectAtIndex:(int)self.flipHistorySlider.value] : nil; // If there are flips stored in our flipHistory array then
-                                                                                                                                            // set the current flip being displayed to match the position
-                                                                                                                                            // of the flip slider, otherwise sit it to be an empty string.
-    self.flipHistoryLabel.alpha = (self.flipHistorySlider.value < self.flipHistorySlider.maximumValue) ? 0.3 : 1.0; // If current flipHistory being displayed is not the most recent flip then make it
-                                                                                                                    // semi-transparent, otherwise make it fully opaque.
-    // If the flipHistorySlider's min and max values are identical disable and hide the slider, otherwise enable and show the slider.
-    self.flipHistorySlider.enabled = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? NO : YES;
-    self.flipHistorySlider.alpha = (self.flipHistorySlider.minimumValue == self.flipHistorySlider.maximumValue) ? 0.0: 1.0;
-    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount]; // Update the total flip count display (includes flip cards faceUp and faceDown!).
+    for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
+        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
+        Card *card = [self.game cardAtIndex:indexPath.item];
+        [self updateCell:cell usingCard:card animate:YES];
+    }
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
-- (void)renderCards
+- (void)setFlipCount:(int)flipCount
 {
-    for (UIButton *cardButton in self.cardButtons) { // Do this to each of our card buttons
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]; // Store a copy of the current Card in our collection
-        [cardButton setTitle:card.contents forState:UIControlStateSelected]; // Show contents of card if button is in selected/enabled state.
-        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled]; // Show contents of card if button is in selected/disabled state.
-        cardButton.selected = card.isFaceUp;
-        cardButton.enabled = !card.isUnplayable;
-        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0; // If card isn't in play anymore make it semi-transparent, otherwise it should be fully opaque.
+    _flipCount = flipCount;
+    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
+}
+
+- (IBAction)deal {
+    self.game = nil;
+    self.gameResult = nil;
+    self.flipCount = 0;
+    [self updateUI];
+}
+
+- (IBAction)flipCard:(UITapGestureRecognizer *)gesture
+{
+    CGPoint tapLocation = [gesture locationInView:self.cardCollectionView];
+    NSIndexPath *indexPath = [self.cardCollectionView indexPathForItemAtPoint:tapLocation];
+    if (indexPath) {
+        [self.game flipCardAtIndex:indexPath.item];
+        self.flipCount++;
+        [self updateUI];
+        self.gameResult.score = self.game.score;
     }
 }
 
-// The user has requested to flip an enabled card. Track history and increment counters and slider as needed.
-- (IBAction)flipCard:(UIButton *)sender
+/*- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSArray *flipResult = nil;
-    NSMutableAttributedString *flipSummary = nil;
-    
-    flipResult = [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    flipSummary = [self parseFlipResult:flipResult];
-    if (flipSummary) [self.flipHistory addObject:flipSummary];
-    self.flipCount++;
-    self.flipHistorySlider.maximumValue = [self.flipHistory count]-1;
-    self.flipHistorySlider.value = self.flipHistorySlider.maximumValue;
-    [self updateUI];
-    self.gameResult.score = self.game.score;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    [self dealNewGame];
+    [self deal];
 }
 
 - (NSMutableAttributedString *)parseFlipResult:(NSArray *)flipResult
@@ -159,7 +126,7 @@
             flipSummary = [[NSMutableAttributedString alloc] initWithString:@"Flipped up "];
             [flipSummary appendAttributedString:flippedCard.attributedContents];
         }
-        [flipSummary addAttributes:self.flipSummaryAttributes range:NSMakeRange(0, [flipSummary length])];
+        //[flipSummary addAttributes:self.flipSummaryAttributes range:NSMakeRange(0, [flipSummary length])];
     }
     
     return flipSummary;
@@ -181,17 +148,6 @@
     }
     
     return stringOfCards;
-}
-
-// Reset the game elements for a new game using a new Deck.
-- (IBAction)dealNewGame {
-    self.game = nil; // Reset our model
-    self.gameResult = nil;
-    self.flipCount = 0;
-    self.flipHistory = nil; // Reset our flipHistory tracking array.
-    self.flipHistorySlider.maximumValue = 0;
-    self.flipHistorySlider.value = 0.0;
-    [self updateUI];
-}
+}*/
 
 @end

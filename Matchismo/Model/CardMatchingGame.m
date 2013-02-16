@@ -9,7 +9,7 @@
 #import "CardMatchingGame.h"
 
 @interface CardMatchingGame()
-@property (strong, nonatomic) NSMutableArray *cards; // of Card
+@property (strong, nonatomic) NSMutableArray *cards;
 @property (readwrite, nonatomic) int score;
 @property (nonatomic) int numberOfCardsToMatch;
 @property (nonatomic) NSUInteger matchBonus;

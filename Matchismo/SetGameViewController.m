@@ -8,25 +8,55 @@
 
 #import "SetGameViewController.h"
 #import "SetCardDeck.h"
+#import "SetCard.h"
+#import "PlayingCardDeck.h" // TEMP!
+#import "PlayingCard.h"     // TEMP!
+#import "PlayingCardCollectionViewCell.h" // TEMP!
 #import "CardMatchingGame.h"
 
 #define CARD_MATCH_MODE 3
 
 @interface CardGameViewController ()
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (strong, nonatomic) CardMatchingGame *game;
+//@property (strong, nonatomic) IBOutlet UIView *playingCardView;
 @end
 
 @implementation SetGameViewController
 
-@synthesize game = _game;
-
-- (NSString *)gameName
+- (Deck *)createDeck
 {
-    return @"Set";
+    return [[PlayingCardDeck alloc] init];
 }
 
-- (CardMatchingGame *)game
+- (NSUInteger)startingCardCount
+{
+    return 1;
+}
+
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animate:(BOOL)animate
+{
+    if ([cell isKindOfClass:[PlayingCardCollectionViewCell class]]) {
+        PlayingCardView *playingCardView = ((PlayingCardCollectionViewCell *)cell).playingCardView;
+        if ([card isKindOfClass:[PlayingCard class]]) {
+            PlayingCard *playingCard = (PlayingCard *)card;
+            playingCardView.rank = playingCard.rank;
+            playingCardView.suit = playingCard.suit;
+            if (animate && playingCardView.isFaceUp != playingCard.isFaceUp) {
+                [UIView transitionWithView:playingCardView
+                                  duration:0.5
+                                   options:UIViewAnimationOptionTransitionFlipFromLeft
+                                animations:^{
+                                    playingCardView.faceUp = playingCard.isFaceUp;
+                                }
+                                completion:NULL];
+            } else {
+                playingCardView.faceUp = playingCard.isFaceUp;
+            }
+            playingCardView.alpha = playingCard.isUnplayable ? 0.3 : 1.0;
+        }
+    }
+}
+
+/*- (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                           usingDeck:[[SetCardDeck alloc] init]
@@ -51,6 +81,6 @@
         }
         [cardButton setBackgroundColor:(cardButton.isSelected) ? [UIColor lightGrayColor] : nil];
     }
-}
+}*/
 
 @end

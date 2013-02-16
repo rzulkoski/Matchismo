@@ -8,44 +8,44 @@
 
 #import "MatchGameViewController.h"
 #import "PlayingCardDeck.h"
-#import "CardMatchingGame.h"
+#import "PlayingCard.h"
+#import "PlayingCardCollectionViewCell.h"
 
-#define CARD_MATCH_MODE 2
-
-@interface MatchGameViewController ()
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (strong, nonatomic) CardMatchingGame *game;
-@end
+#define CARD_FLIP_DURATION 0.5
 
 @implementation MatchGameViewController
 
-- (NSString *)gameName
+- (Deck *)createDeck
 {
-    return @"Match";
+    return [[PlayingCardDeck alloc] init];
 }
 
-- (CardMatchingGame *)game
+- (NSUInteger)startingCardCount
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                          usingDeck:[[PlayingCardDeck alloc] init]
-                                                      cardMatchMode:CARD_MATCH_MODE
-                                                         matchBonus:4
-                                                    mismatchPenalty:2
-                                                           flipCost:1];
-    return _game;
+    return 20;
 }
 
-- (void)renderCards
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animate:(BOOL)animate
 {
-    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"]; // Create an image object for our cardback image so it can be set properly.
-    for (UIButton *cardButton in self.cardButtons) { // Do this to each of our card buttons
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]]; // Store a copy of the current Card in our collection
-        [cardButton setTitle:card.contents forState:UIControlStateSelected]; // Show contents of card if button is in selected/enabled state.
-        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled]; // Show contents of card if button is in selected/disabled state.
-        cardButton.selected = card.isFaceUp;
-        [cardButton setImage:(!cardButton.selected) ? cardBackImage : nil forState:UIControlStateNormal]; // If the cardButton is not selected (face down) then show cardBack, otherwise show face.
-        cardButton.enabled = !card.isUnplayable;
-        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0; // If card isn't in play anymore make it semi-transparent, otherwise it should be fully opaque.
+    if ([cell isKindOfClass:[PlayingCardCollectionViewCell class]]) {
+        PlayingCardView *playingCardView = ((PlayingCardCollectionViewCell *)cell).playingCardView;
+        if ([card isKindOfClass:[PlayingCard class]]) {
+            PlayingCard *playingCard = (PlayingCard *)card;
+            playingCardView.rank = playingCard.rank;
+            playingCardView.suit = playingCard.suit;
+            if (animate && playingCardView.isFaceUp != playingCard.isFaceUp) {
+                [UIView transitionWithView:playingCardView
+                                  duration:CARD_FLIP_DURATION
+                                   options:UIViewAnimationOptionTransitionFlipFromLeft
+                                animations:^{
+                                    playingCardView.faceUp = playingCard.isFaceUp;
+                                }
+                                completion:NULL];
+            } else {
+                playingCardView.faceUp = playingCard.isFaceUp;
+            }
+            playingCardView.alpha = playingCard.isUnplayable ? 0.3 : 1.0;
+        }
     }
 }
 
